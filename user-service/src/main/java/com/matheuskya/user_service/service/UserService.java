@@ -1,12 +1,15 @@
 package com.matheuskya.user_service.service;
 
+import com.matheuskya.user_service.dto.UserRequestDto;
 import com.matheuskya.user_service.dto.UserResponseDto;
 import com.matheuskya.user_service.exceptions.ResourceNotFoundException;
 import com.matheuskya.user_service.model.User;
 import com.matheuskya.user_service.model.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserService {
     private final UserRepository userRepository;
 
@@ -20,6 +23,16 @@ public class UserService {
                         "User with id: " + id + " not found"
                 ));
         return convertToDto(user);
+    }
+
+    public UserResponseDto createNewUser(UserRequestDto requestDto) {
+        User newUser = new User();
+        newUser.setName(requestDto.getName());
+        newUser.setPassword(requestDto.getPassword());
+
+        userRepository.save(newUser);
+
+        return convertToDto(newUser);
     }
 
     public List<User> findAllUsers() {

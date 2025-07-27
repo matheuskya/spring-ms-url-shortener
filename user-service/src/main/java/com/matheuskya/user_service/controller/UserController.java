@@ -1,11 +1,12 @@
 package com.matheuskya.user_service.controller;
 
+import com.matheuskya.user_service.dto.UserRequestDto;
 import com.matheuskya.user_service.dto.UserResponseDto;
 import com.matheuskya.user_service.model.User;
 import com.matheuskya.user_service.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +29,13 @@ public class UserController {
     public UserResponseDto getById(@PathVariable String id) {
         UserResponseDto response = userService.findUserById(id);
         return response;
+    }
+
+    @PostMapping("/user")
+    public ResponseEntity<UserResponseDto> createNewUser(
+            @RequestBody UserRequestDto userRequestDto
+    ) {
+        UserResponseDto newUser = userService.createNewUser(userRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 }
