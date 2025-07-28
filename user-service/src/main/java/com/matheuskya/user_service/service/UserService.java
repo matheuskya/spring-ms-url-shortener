@@ -39,6 +39,26 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public UserResponseDto updateUser(UserRequestDto updatedInfo, String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User with id: " + id + " not found"));
+        user.setPassword(updatedInfo.getPassword());
+        user.setName(updatedInfo.getName());
+        userRepository.save(user);
+
+        return convertToDto(user);
+    }
+
+    public void deleteUser(String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User with id:" +
+                                id
+                                +
+                                " not found"));
+        userRepository.delete(user);
+    }
+
     private UserResponseDto convertToDto(User user) {
         UserResponseDto response = new UserResponseDto();
         response.setId(user.getId());
